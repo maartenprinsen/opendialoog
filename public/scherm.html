@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Presentatiescherm — OpenDialoog</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  body { font-size: clamp(16px, 1.5vw, 24px); }
+  .screen { max-width: 1400px; margin: 0 auto; padding: 3vh 4vw; }
+  .bigq { font-family: var(--serif); font-size: clamp(1.6rem, 3.4vw, 3rem); line-height: 1.2; margin: .3em 0 .6em; }
+  .join { display: flex; gap: 2vw; align-items: baseline; flex-wrap: wrap; color: var(--ink-2); }
+  .join code { font-size: 1.2em; color: var(--ink); background: var(--surface); border: 1px solid var(--line); padding: 4px 12px; border-radius: 10px; }
+  .rank { display: grid; grid-template-columns: 4.5em 1fr; gap: 1em; align-items: center; padding: .7em 0; border-bottom: 1px solid var(--line); }
+  .rank .p { font-size: 1.8em; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--agree); }
+  .rank .t { font-size: 1.15em; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 2vw; }
+</style>
+<script src="/common.js" defer></script>
+<script src="/scherm.js" defer></script>
+</head>
+<body>
+<main class="screen">
+  <div class="join"><span class="live" id="live">–</span><span>Doe mee via <code id="link"></code></span></div>
+  <h1 class="bigq" id="q">Even wachten op de volgende vraag…</h1>
+  <div class="row" style="margin-bottom:1em"><button class="small ghost" id="mode">Toon thema's</button></div>
+  <div id="body"></div>
+</main>
+</body>
+</html>

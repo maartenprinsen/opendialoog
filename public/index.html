@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenDialoog — anonieme online dialogen</title>
+<meta name="description" content="Open-source software voor anonieme, live online dialogen: deelnemers schrijven, lezen en wegen elkaars berichten.">
+<link rel="stylesheet" href="/style.css">
+<style>
+  .hero { padding: 28px 0 8px; }
+  .hero h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); max-width: 18ch; }
+  .lead { font-size: 1.12rem; color: var(--ink-2); max-width: 60ch; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 22px 0; }
+  .step { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .step b { display: block; font-family: var(--serif); font-size: 1.6rem; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+  .mine a { display: block; padding: 8px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+</style>
+<script src="/common.js" defer></script>
+<script src="/index.js" defer></script>
+</head>
+<body>
+<header class="top"><div class="wrap"><span class="brand" data-logo><span>OpenDialoog</span></span></div></header>
+<main class="wrap">
+  <section class="hero">
+    <h1>Stel één vraag aan iedereen die het aangaat.</h1>
+    <p class="lead">Deelnemers schrijven anoniem hun antwoord, beoordelen elkaars berichten en zien live wat breed gedragen wordt. Vrij te gebruiken, open source, zonder accounts en zonder tracking.</p>
+  </section>
+  <div class="steps">
+    <div class="step"><b>1</b>Iedereen schrijft eerst een eigen antwoord, zonder dat van anderen te zien.</div>
+    <div class="step"><b>2</b>Daarna beoordeelt iedereen berichten van anderen op een schaal van oneens tot eens.</div>
+    <div class="step"><b>3</b>Berichten met steun gaan naar steeds meer mensen; jij groepeert ze in thema's.</div>
+  </div>
+
+  <div class="card">
+    <h2>Nieuwe dialoog</h2>
+    <div class="field"><label for="title">Titel</label><input type="text" id="title" placeholder="Bijv. Studiedag: samenwerking tussen secties"></div>
+    <div class="field"><label for="intro">Welkomsttekst voor deelnemers (optioneel)</label><textarea id="intro" rows="3" placeholder="Fijn dat je meedoet. Deze dialoog duurt ongeveer 45 minuten…"></textarea></div>
+    <div class="field"><label for="q1">Eerste open vraag</label><textarea id="q1" rows="2" placeholder="Bijv. Wat zou je werk merkbaar beter maken, en waarom juist dat?"></textarea>
+      <div class="hint">Stel een open vraag die uitnodigt tot uitleg: “wat”, “waarom”, “welke oplossing zie je zelf?”.</div></div>
+    <details class="field">
+      <summary>Keuzevraag voor uitsplitsing toevoegen (optioneel)</summary>
+      <div class="field" style="margin-top:10px"><label for="segQ">Vraag</label><input type="text" id="segQ" placeholder="Bijv. In welk team werk je?"></div>
+      <div class="field"><label for="segO">Opties (één per regel)</label><textarea id="segO" rows="3"></textarea>
+        <div class="hint">Uitkomsten per groep worden alleen getoond voor groepen van minstens acht personen.</div></div>
+    </details>
+    <div class="field hidden" id="pwF"><label for="pw">Wachtwoord van deze server</label><input type="password" id="pw"></div>
+    <div class="row" style="margin-top:14px"><button id="create">Dialoog aanmaken</button></div>
+  </div>
+
+  <div class="card hidden" id="mineCard">
+    <h2>Jouw dialogen op dit apparaat</h2>
+    <div class="mine" id="mine"></div>
+  </div>
+</main>
+<footer class="footer">OpenDialoog · MIT-licentie · <a href="https://opensource.org/license/mit" rel="noopener">vrij te gebruiken en aan te passen</a></footer>
+</body>
+</html>

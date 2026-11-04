@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Rapport — OpenDialoog</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .theme-row { display: grid; grid-template-columns: minmax(140px, 1.4fr) 70px 2fr 60px; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .theme-row .name { font-weight: 600; }
+  .qhead { border-top: 3px solid var(--accent); padding-top: 14px; margin-top: 26px; }
+  .seg { font-size: .8rem; color: var(--ink-2); }
+  td.text { min-width: 280px; }
+  @media (max-width: 600px) { .theme-row { grid-template-columns: 1fr 50px; } .theme-row .bar, .theme-row .pctc { grid-column: span 1; } }
+</style>
+<script src="/common.js" defer></script>
+<script src="/rapport.js" defer></script>
+</head>
+<body>
+<header class="top"><div class="wrap wide">
+  <span class="brand" data-logo><span>Rapport</span></span><span class="grow"></span>
+  <a class="btn ghost small" id="csv">Download CSV</a>
+  <button class="small" id="print">Afdrukken / PDF</button>
+</div></header>
+<main class="wrap wide" id="out"><div class="empty">Laden…</div></main>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Dialoog</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/common.js" defer></script>
+<script src="/deelnemer.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <span class="brand" data-logo><span id="topTitle">Dialoog</span></span>
+    <span class="grow"></span>
+    <span class="live hidden" id="live"></span>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+  <div class="empty" id="loading">Laden…</div>
+
+  <!-- Welkom -->
+  <section id="welcome" class="hidden">
+    <div class="card">
+      <h1 id="wTitle"></h1>
+      <p id="wIntro" class="muted" style="white-space:pre-line"></p>
+      <div class="stack" style="margin:16px 0">
+        <div><b>Zo werkt het</b></div>
+        <div>1. Je schrijft eerst je eigen antwoord op de vraag.</div>
+        <div>2. Daarna beoordeel je berichten van anderen: schuif naar links als je het oneens bent, naar rechts als je het eens bent.</div>
+        <div>3. Berichten met veel steun worden aan steeds meer mensen voorgelegd.</div>
+      </div>
+      <p class="notice"><b>Je doet anoniem mee.</b> Je krijgt een willekeurige code; er wordt geen naam, e-mailadres of IP-adres opgeslagen. Schrijf daarom ook geen namen van jezelf of anderen in je berichten.</p>
+      <div class="field hidden" id="codeField">
+        <label for="accessCode">Toegangscode</label>
+        <input type="text" id="accessCode" autocomplete="off" autocapitalize="off">
+      </div>
+      <div class="row" style="margin-top:14px"><button id="joinBtn">Doe mee</button></div>
+    </div>
+  </section>
+
+  <!-- Deelname -->
+  <section id="main" class="hidden">
+    <div class="notice hidden" id="announcement" role="status"></div>
+
+    <div id="waiting" class="card hidden">
+      <div class="empty">
+        <h2>Even wachten</h2>
+        <p>De volgende vraag verschijnt hier vanzelf. Je hoeft niets te verversen.</p>
+      </div>
+      <div id="closedResults"></div>
+    </div>
+
+    <div id="segmentQ" class="card hidden">
+      <div class="eyebrow">Even een vraag over jou</div>
+      <p class="question" id="segText"></p>
+      <p class="hint">Dit wordt alleen gebruikt om uitkomsten per groep te tonen, en nooit voor groepen kleiner dan acht mensen.</p>
+      <div class="options" id="segOptions"></div>
+    </div>
+
+    <div id="openQ" class="hidden">
+      <div class="card">
+        <div class="eyebrow">De vraag</div>
+        <p class="question" id="qText"></p>
+      </div>
+
+      <nav class="tabs hidden" id="tabs" role="tablist">
+        <button role="tab" data-tab="vote" aria-selected="true">Beoordelen <span class="badge hidden" id="voteBadge"></span></button>
+        <button role="tab" data-tab="write">Schrijven</button>
+        <button role="tab" data-tab="mine">Mijn</button>
+        <button role="tab" data-tab="results" id="resultsTab">Stand</button>
+      </nav>
+
+      <div data-pane="write" class="card">
+        <p id="writeLead" class="muted">Schrijf eerst je eigen antwoord. De berichten van anderen zie je pas daarna, zodat ze je niet beïnvloeden.</p>
+        <label for="msgText" class="hidden" id="writeLabel">Nog iets toevoegen?</label>
+        <textarea id="msgText" placeholder="Typ je antwoord…" maxlength="400"></textarea>
+        <div class="row spread" style="margin-top:8px">
+          <button class="quiet" id="skipBtn">Ik heb nu niets toe te voegen</button>
+          <span class="row"><span class="counter" id="counter"></span><button id="sendBtn">Verstuur</button></span>
+        </div>
+      </div>
+
+      <div data-pane="vote" class="hidden">
+        <div id="batch"></div>
+        <div class="row spread" style="margin-top:10px">
+          <small id="batchInfo"></small>
+          <small id="votedTotal"></small>
+        </div>
+      </div>
+
+      <div data-pane="mine" class="hidden" id="mine"></div>
+      <div data-pane="results" class="hidden" id="results"></div>
+    </div>
+  </section>
+</main>
+<footer class="footer">Anoniem · geen account · geen tracking</footer>
+</body>
+</html>
