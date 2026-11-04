@@ -1,0 +1,10 @@
+{
+  "name": "opendialoog",
+  "version": "1.0.0",
+  "description": "Anonieme, live online dialogen: deelnemers schrijven, lezen en wegen elkaars berichten.",
+  "main": "server.js",
+  "scripts": { "start": "node server.js", "test": "node test/simulate.js 60" },
+  "engines": { "node": ">=18" },
+  "license": "MIT",
+  "keywords": ["dialoog", "participatie", "deliberatie", "anoniem", "enquete", "brainstorm"]
+}
