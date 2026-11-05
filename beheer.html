@@ -8,7 +8,10 @@
 <link rel="stylesheet" href="/style.css">
 <style>
   .layout { display: grid; grid-template-columns: 340px 1fr; gap: 16px; align-items: start; }
-  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .layout > section { order: -1; } }
+  .layout > * { min-width: 0; }
+  @media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } .layout > section { order: -1; } }
+  @media (max-width: 600px) { .layout .grid2 { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, 1fr); } #bulk select, #bulk button { flex: 1 1 auto; } }
+  @media (max-width: 600px) { .top .wrap { flex-wrap: wrap; gap: 8px; } .top .brand span { display: none; } }
   .qitem { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface); cursor: pointer; }
   .qitem + .qitem { margin-top: 8px; }
   .qitem.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
