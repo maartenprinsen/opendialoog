@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Beheer — OpenDialoog</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .layout { display: grid; grid-template-columns: 340px 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .layout > section { order: -1; } }
+  .qitem { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface); cursor: pointer; }
+  .qitem + .qitem { margin-top: 8px; }
+  .qitem.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+  .qitem .qt { font-weight: 600; font-size: .95rem; overflow-wrap: anywhere; }
+  .chip { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 2px 8px; border-radius: 99px; background: var(--surface-2); color: var(--ink-2); }
+  .chip.open { background: var(--agree-soft); color: var(--agree); }
+  .chip.closed { background: var(--surface-2); color: var(--ink-3); }
+  .linkbox { display: flex; gap: 6px; }
+  .linkbox input { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .85rem; }
+  .mrow.hid td { opacity: .45; }
+  .mrow td.text { min-width: 260px; overflow-wrap: anywhere; }
+  .mrow select { padding: 5px 8px; font-size: .85rem; width: auto; max-width: 180px; }
+  .themechips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .themechips .tag { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+  .sugg { border: 1px dashed var(--line); border-radius: 10px; padding: 10px 12px; }
+  .sugg + .sugg { margin-top: 8px; }
+  .sugg ul { margin: 6px 0; padding-left: 18px; color: var(--ink-2); font-size: .9rem; }
+  details summary { cursor: pointer; font-weight: 600; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .optbar { display: grid; grid-template-columns: 1fr 60px 2fr; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
+</style>
+<script src="/common.js" defer></script>
+<script src="/beheer.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap wide">
+    <a class="brand" href="/" data-logo><span>OpenDialoog</span></a>
+    <span class="muted hide-sm">·</span>
+    <b id="title" class="hide-sm"></b>
+    <span class="grow"></span>
+    <span class="live" id="live">–</span>
+    <a class="btn ghost small" id="screenLink" target="_blank" rel="noopener">Presentatiescherm</a>
+    <a class="btn small" id="reportLink" target="_blank" rel="noopener">Rapport</a>
+  </div>
+</header>
+
+<main class="wrap wide">
+  <div class="notice hidden" id="noKey">Deze beheerpagina heeft een geheime sleutel nodig. Open de beheerlink die je bij het aanmaken kreeg.</div>
+
+  <div class="notice hidden" id="lost" role="alert"></div>
+  <div class="layout hidden" id="app">
+    <aside>
+      <div class="card">
+        <h2>Deelnemerslink</h2>
+        <div class="linkbox"><input type="text" id="pLink" readonly><button class="small" id="copyP">Kopieer</button></div>
+        <p class="hint">Deel deze link met de deelnemers. Geen account of app nodig.</p>
+        <details style="margin-top:10px">
+          <summary>Beheerlink (geheim)</summary>
+          <div class="linkbox" style="margin-top:8px"><input type="text" id="aLink" readonly><button class="small ghost" id="copyA">Kopieer</button></div>
+          <p class="hint">Bewaar deze link goed: wie hem heeft, kan de dialoog beheren.</p>
+        </details>
+      </div>
+
+      <div class="card">
+        <div class="row spread"><h2 style="margin:0">Vragen</h2><span class="muted" id="qcount"></span></div>
+        <div id="qlist" style="margin-top:12px"></div>
+        <details style="margin-top:14px" id="addQ">
+          <summary>+ Vraag toevoegen</summary>
+          <div class="field" style="margin-top:10px">
+            <label for="nqType">Soort vraag</label>
+            <select id="nqType">
+              <option value="open">Open vraag (schrijven en stemmen)</option>
+              <option value="segment">Keuzevraag voor uitsplitsing (bijv. afdeling, leeftijdsgroep)</option>
+            </select>
+          </div>
+          <div class="field"><label for="nqText">Vraag</label><textarea id="nqText" rows="3" placeholder="Bijv. Wat zou je werk merkbaar beter maken, en waarom juist dat?"></textarea></div>
+          <div class="field hidden" id="nqOptsF"><label for="nqOpts">Antwoordopties (één per regel)</label><textarea id="nqOpts" rows="4" placeholder="Onderwijs&#10;Ondersteuning&#10;Directie"></textarea></div>
+          <div class="row" style="margin-top:10px"><button id="nqAdd">Toevoegen</button></div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>Mededeling aan iedereen</h2>
+        <textarea id="annText" rows="2" placeholder="Bijv. Nog 5 minuten voor deze vraag."></textarea>
+        <div class="row" style="margin-top:8px"><button class="small" id="annSend">Plaatsen</button><button class="small ghost" id="annClear">Weghalen</button></div>
+      </div>
+
+      <div class="card">
+        <details>
+          <summary>Instellingen</summary>
+          <div class="field" style="margin-top:10px"><label for="sTitle">Titel</label><input type="text" id="sTitle"></div>
+          <div class="field"><label for="sIntro">Welkomsttekst</label><textarea id="sIntro" rows="3"></textarea></div>
+          <div class="field"><label for="sCode">Toegangscode (optioneel)</label><input type="text" id="sCode" placeholder="leeg = iedereen met de link"></div>
+          <div class="grid2" style="margin-top:12px">
+            <div><label for="sSpread">Eerste verspreiding</label><input type="number" id="sSpread" min="2" max="50"><div class="hint">Een nieuw bericht gaat eerst naar zoveel anderen.</div></div>
+            <div><label for="sPromote">Doorzetten bij % eens</label><input type="number" id="sPromote" min="0" max="100"><div class="hint">Daarna verdubbelt het bereik bij deze steun.</div></div>
+            <div><label for="sBatch">Berichten per ronde</label><input type="number" id="sBatch" min="1" max="10"></div>
+            <div><label for="sMax">Max. berichten p.p.</label><input type="number" id="sMax" min="1" max="100"></div>
+            <div><label for="sLen">Max. tekens</label><input type="number" id="sLen" min="50" max="2000"></div>
+            <div><label for="sMin">Min. groepsgrootte rapport</label><input type="number" id="sMin" min="3" max="100"></div>
+          </div>
+          <div class="row" style="margin-top:12px"><button class="small" id="saveSettings">Opslaan</button></div>
+          <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+          <button class="small danger" id="deleteSession">Dialoog definitief verwijderen</button>
+        </details>
+      </div>
+    </aside>
+
+    <section id="panel">
+      <div class="card empty" id="noQ">Voeg links een vraag toe om te beginnen.</div>
+      <div id="qpanel" class="hidden">
+        <div class="card">
+          <div class="row spread">
+            <span class="chip" id="qStatus"></span>
+            <span class="row">
+              <button class="small" id="qOpen">Open voor deelnemers</button>
+              <button class="small ghost" id="qClose">Sluiten</button>
+            </span>
+          </div>
+          <p class="question" id="qText" style="margin-top:10px"></p>
+          <p class="notice hidden" id="qHint" style="margin:12px 0 0">Deze vraag is nog niet zichtbaar. Klik op <b>Open voor deelnemers</b> om hem te starten.</p>
+          <div class="stats" style="margin-top:14px" id="qStats"></div>
+        </div>
+
+        <div id="segPanel" class="card hidden">
+          <h2>Antwoorden</h2>
+          <div id="segBars"></div>
+          <p class="hint">In het rapport worden groepen kleiner dan de minimale groepsgrootte nooit uitgesplitst.</p>
+        </div>
+
+        <div id="openPanel" class="hidden">
+          <div class="card">
+            <div class="grid2">
+              <div>
+                <label for="qPublish">Wat zien deelnemers?</label>
+                <select id="qPublish">
+                  <option value="ranking">Tussenstand: berichten met meeste steun</option>
+                  <option value="themes">Berichten gegroepeerd per thema</option>
+                  <option value="none">Niets (alleen beoordelen)</option>
+                </select>
+              </div>
+              <div>
+                <label for="stText">Stelling voorleggen aan iedereen</label>
+                <div class="linkbox"><input type="text" id="stText" placeholder="Bijv. We moeten één gedeelde target invoeren."><button class="small" id="stSend">Plaats</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="row spread">
+              <h2 style="margin:0">Thema's</h2>
+              <span class="row">
+                <button class="small ghost" id="suggestBtn">Stel thema's voor</button>
+              </span>
+            </div>
+            <div class="themechips" id="themes" style="margin-top:10px"></div>
+            <div class="linkbox" style="margin-top:10px"><input type="text" id="newTheme" placeholder="Nieuw thema, bijv. Onduidelijk eigenaarschap"><button class="small" id="addTheme">Toevoegen</button></div>
+            <div id="suggestions" style="margin-top:12px"></div>
+          </div>
+
+          <div class="card">
+            <div class="row spread">
+              <h2 style="margin:0">Berichten</h2>
+              <span class="row">
+                <select id="filter" style="width:auto"><option value="all">Alle</option><option value="untheme">Zonder thema</option><option value="hidden">Verborgen</option></select>
+                <select id="sort" style="width:auto"><option value="agree">Meeste steun</option><option value="votes">Meeste stemmen</option><option value="new">Nieuwste</option><option value="controversial">Meest verdeeld</option></select>
+              </span>
+            </div>
+            <div class="row" style="margin:10px 0" id="bulk">
+              <span class="muted" id="selCount">0 geselecteerd</span>
+              <select id="bulkTheme" style="width:auto"></select>
+              <button class="small ghost" id="bulkApply">Thema toekennen</button>
+              <button class="small ghost" id="bulkNew">Nieuw thema van selectie</button>
+            </div>
+            <div class="table-scroll"><table>
+              <thead><tr><th style="width:28px"><input type="checkbox" id="selAll" aria-label="Alles selecteren"></th><th>Bericht</th><th class="num">Stemmen</th><th style="min-width:130px">Steun</th><th>Thema</th><th></th></tr></thead>
+              <tbody id="mlist"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+</body>
+</html>
